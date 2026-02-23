@@ -1,0 +1,118 @@
+{
+    "brand": {
+        "name": "Z-era",
+        "tagline": "Walk the Future",
+        "description": "Z-era is a bold, Gen-Z women's footwear brand redefining style with comfort. Born from the streets and designed for the future — we craft sandals, flats, and sneakers that match your energy.",
+        "founded": "2024",
+        "mission": "To empower every woman to step into her confidence with footwear that's sustainable, stylish, and unapologetically bold.",
+        "socialLinks": {
+            "instagram": "https://instagram.com/z_era",
+            "twitter": "https://twitter.com/z_era",
+            "tiktok": "https://tiktok.com/@z_era"
+        }
+    },
+    "categories": [
+        {
+            "name": "Sandals",
+            "slug": "sandals",
+            "icon": "🩴",
+            "description": "Breezy vibes, effortless style"
+        },
+        {
+            "name": "Flats",
+            "slug": "flats",
+            "icon": "🥿",
+            "description": "Comfort meets chic, all day long"
+        },
+        {
+            "name": "Sneakers",
+            "slug": "sneakers",
+            "icon": "👟",
+            "description": "Street-ready, always on the move"
+        },
+        {
+            "name": "Boots",
+            "slug": "boots",
+            "icon": "🥾",
+            "description": "Bold, durable, and stylish"
+        },
+        {
+            "name": "Heels",
+            "slug": "heels",
+            "icon": "👠",
+            "description": "Elevate your elegance"
+        }
+    ],
+    "sizes": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+    ],
+    "priceRanges": [
+        {
+            "label": "Under ₹999",
+            "min": 0,
+            "max": 999
+        },
+        {
+            "label": "₹1,000 — ₹1,999",
+            "min": 1000,
+            "max": 1999
+        },
+        {
+            "label": "₹2,000 — ₹2,999",
+            "min": 2000,
+            "max": 2999
+        },
+        {
+            "label": "₹3,000+",
+            "min": 3000,
+            "max": 99999
+        }
+    ],
+    "carousel": [
+        {
+            "title": "Effortless Style. Unmatched Comfort.",
+            "subtitle": "Step into the spotlight with our latest premium drops.",
+            "cta": "Shop Collection",
+            "ctaLink": "/#premium-section",
+            "gradient": "rgba(0,0,0,0.1)"
+        },
+        {
+            "title": "Fall in Love with Every Step",
+            "subtitle": "Comfort that follows you everywhere. Season sale is live.",
+            "cta": "View Deals",
+            "ctaLink": "/#budget-section",
+            "gradient": "rgba(0,0,0,0.1)"
+        },
+        {
+            "title": "Designed for Motion, Made for You",
+            "subtitle": "Discover the art of comfortable walking.",
+            "cta": "Explore Now",
+            "ctaLink": "/#products",
+            "gradient": "rgba(0,0,0,0.1)"
+        }
+    ],
+    "payment": {
+        "cod": true,
+        "upi": true,
+        "upiId": "z-era@upi"
+    },
+    "colors": [
+        "Black",
+        "White",
+        "Pink",
+        "Red",
+        "Blue",
+        "Beige",
+        "Brown",
+        "Gold",
+        "Silver",
+        "Multi"
+    ]
+}
