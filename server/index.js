@@ -53,8 +53,19 @@ const start = async () => {
         await sequelize.authenticate();
         console.log('✅ Database connected');
 
-        await sequelize.sync({ alter: true });
+        // Disable foreign key checks for SQLite during sync to avoid constraint errors
+        if (sequelize.getDialect() === 'sqlite') {
+            await sequelize.query('PRAGMA foreign_keys = OFF');
+        }
+
+        // Use safer sync strategy for SQLite
+        const syncOptions = sequelize.getDialect() === 'sqlite' ? {} : { alter: true };
+        await sequelize.sync(syncOptions);
         console.log('✅ Database synced');
+
+        if (sequelize.getDialect() === 'sqlite') {
+            await sequelize.query('PRAGMA foreign_keys = ON');
+        }
 
         // Seed coupons safely
         const Coupon = require('./models/Coupon');
@@ -75,7 +86,10 @@ const start = async () => {
             console.log(`🚀 Z-era API running on http://localhost:${PORT}`);
         });
     } catch (err) {
-        console.error('❌ Failed to start server:', err.message);
+        console.error('❌ Failed to start server:', err);
+        if (err.errors) {
+            err.errors.forEach(e => console.error(`  - ${e.message}`));
+        }
         process.exit(1);
     }
 };
