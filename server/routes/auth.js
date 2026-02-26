@@ -112,4 +112,47 @@ router.put('/profile', auth, async (req, res) => {
     }
 });
 
+// GET /api/auth/debug — Temporary: decode current token and show DB user data
+router.get('/debug', async (req, res) => {
+    try {
+        const header = req.headers.authorization;
+        if (!header || !header.startsWith('Bearer ')) {
+            return res.json({ error: 'No token provided in Authorization header' });
+        }
+        const token = header.split(' ')[1];
+        const decoded = jwt.decode(token); // no verify, just decode
+
+        if (!decoded) return res.json({ error: 'Could not decode token' });
+
+        const dbUser = await User.findByPk(decoded.id, { attributes: ['id', 'name', 'email', 'role'] });
+
+        res.json({
+            token_payload: { id: decoded.id, email: decoded.email, name: decoded.name, role: decoded.role },
+            db_user: dbUser ? dbUser.toJSON() : null,
+            issue: !dbUser ? 'User not found in DB' : (!dbUser.role ? 'DB user has no role' : 'Looks OK — role is ' + dbUser.role)
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST /api/auth/make-admin — Temporary: promote current user to admin
+router.post('/make-admin', auth, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        await user.update({ role: 'admin' });
+
+        // Generate new token with role
+        const token = jwt.sign(
+            { id: user.id, email: user.email, name: user.name, role: 'admin' },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+        res.json({ message: `${user.email} is now admin!`, token, user: { ...user.toJSON(), role: 'admin' } });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;

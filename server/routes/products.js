@@ -121,26 +121,32 @@ router.get('/:id', async (req, res) => {
 // POST /api/products - Create product (admin only)
 router.post('/', auth, authorize('admin'), async (req, res) => {
     try {
-        const { name, description, price, category_id, images, stock, sizes, is_featured, is_new, tier, original_price } = req.body;
+        const { name, description, price, cost_price, category_id, images, stock, sizes, colors, is_featured, is_new, tier, original_price } = req.body;
         const product = await Product.create({
-            name,
-            description,
-            price,
-            category_id,
-            images,
-            stock,
-            sizes,
-            is_featured,
-            is_new,
-            tier,
-            original_price
+            name, description, price, cost_price: parseFloat(cost_price) || 0,
+            category_id, images, stock: parseInt(stock) || 0, sizes, colors,
+            is_featured: is_featured || false, is_new: is_new || false,
+            tier: tier || 'budget', original_price: original_price || null
         });
         const fullProduct = await Product.findByPk(product.id, {
             include: [{ model: Category, as: 'category', attributes: ['id', 'name', 'slug'] }]
         });
         res.status(201).json({ product: fullProduct });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Failed to create product.' });
+    }
+});
+
+// PUT /api/products/:id/stock - Quick stock update (admin)
+router.put('/:id/stock', auth, authorize('admin'), async (req, res) => {
+    try {
+        const product = await Product.findByPk(req.params.id);
+        if (!product) return res.status(404).json({ error: 'Product not found.' });
+        await product.update({ stock: parseInt(req.body.stock) || 0 });
+        res.json({ message: 'Stock updated', product });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to update stock.' });
     }
 });
 
@@ -149,12 +155,11 @@ router.put('/:id', auth, authorize('admin'), async (req, res) => {
     try {
         const product = await Product.findByPk(req.params.id);
         if (!product) return res.status(404).json({ error: 'Product not found.' });
-        const { name, description, price, category_id, images, stock, sizes, is_featured, is_new, tier, original_price } = req.body;
-        await product.update({ name, description, price, category_id, images, stock, sizes, is_featured, is_new, tier, original_price });
-        const updatedProduct = await Product.findByPk(product.id, {
-            include: [{ model: Category, as: 'category', attributes: ['id', 'name', 'slug'] }]
-        });
-        res.json({ product: updatedProduct });
+        const updatable = ['name', 'description', 'price', 'cost_price', 'category_id', 'images', 'stock', 'sizes', 'colors', 'is_featured', 'is_new', 'tier', 'original_price', 'rating'];
+        const updates = {};
+        updatable.forEach(key => { if (req.body[key] !== undefined) updates[key] = req.body[key]; });
+        await product.update(updates);
+        res.json({ product: await Product.findByPk(product.id, { include: [{ model: Category, as: 'category', attributes: ['id', 'name', 'slug'] }] }) });
     } catch (err) {
         res.status(500).json({ error: 'Failed to update product.' });
     }

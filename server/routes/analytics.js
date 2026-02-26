@@ -9,7 +9,7 @@ const router = express.Router();
 const authorizeRoles = authorize('admin', 'manager');
 
 // GET /api/analytics/stats — Today & Week Stats (Admin/Manager)
-router.get('/stats', authorizeRoles, async (req, res) => {
+router.get('/stats', auth, authorizeRoles, async (req, res) => {
     try {
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
