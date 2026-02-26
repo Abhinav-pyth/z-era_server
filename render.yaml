@@ -1,0 +1,28 @@
+services:
+  # Base service for the API
+  - type: web
+    name: z-era-api
+    env: node
+    plan: free
+    buildCommand: npm install --prefix server
+    startCommand: npm start --prefix server
+    envVars:
+      - key: DB_DIALECT
+        value: sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+  # Static site for the React frontend
+  - type: static
+    name: z-era-client
+    env: static
+    buildCommand: npm install --prefix client && npm run build --prefix client
+    publishDir: client/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: z-era-api
+          property: host

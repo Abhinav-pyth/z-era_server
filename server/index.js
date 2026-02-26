@@ -51,7 +51,7 @@ app.get('/api/health', (req, res) => {
 const start = async () => {
     try {
         await sequelize.authenticate();
-        console.log('✅ MySQL connected');
+        console.log('✅ Database connected');
 
         await sequelize.sync({ alter: true });
         console.log('✅ Database synced');
