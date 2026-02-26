@@ -1,4 +1,32 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const getApiBase = () => {
+    let base = import.meta.env.VITE_API_URL || '/api';
+
+    // If it's a relative path starting with /, use it as is
+    if (base.startsWith('/')) return base;
+
+    // If it starts with http, use it as is
+    if (base.startsWith('http')) return base;
+
+    // Handle hostnames / service names without protocol (common in Render Blueprints)
+    // If it doesn't look like a full domain (no dot), assume it's a Render service name
+    if (!base.includes('.')) {
+        base = `${base}.onrender.com`;
+    }
+
+    // Ensure we have a protocol
+    if (!base.startsWith('http')) {
+        base = `https://${base}`;
+    }
+
+    // Ensure it ends with /api
+    if (!base.endsWith('/api') && !base.includes('/api/')) {
+        base = base.endsWith('/') ? `${base}api` : `${base}/api`;
+    }
+
+    return base;
+};
+
+const API_BASE = getApiBase();
 
 const headers = () => {
     const h = { 'Content-Type': 'application/json' };
