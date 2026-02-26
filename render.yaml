@@ -15,9 +15,8 @@ services:
         value: production
 
   # Static site for the React frontend
-  - type: static
+  - type: static_site
     name: z-era-client
-    env: static
     buildCommand: npm install --prefix client && npm run build --prefix client
     publishDir: client/dist
     envVars:
