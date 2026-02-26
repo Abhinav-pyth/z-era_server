@@ -2,7 +2,7 @@ services:
   # Base service for the API
   - type: web
     name: z-era-api
-    env: node
+    runtime: node   # Changed 'env' to 'runtime' (recommended)
     plan: free
     buildCommand: npm install --prefix server
     startCommand: npm start --prefix server
@@ -15,10 +15,11 @@ services:
         value: production
 
   # Static site for the React frontend
-  - type: static_site
+  - type: web       # Must be 'web'
     name: z-era-client
+    runtime: static # This defines it as a static site
     buildCommand: npm install --prefix client && npm run build --prefix client
-    publishDir: client/dist
+    staticPublishPath: client/dist # Correct field name for blueprints
     envVars:
       - key: VITE_API_URL
         fromService:
