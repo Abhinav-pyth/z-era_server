@@ -197,6 +197,21 @@ export default function ProductDetailPage() {
                     {user && <ReviewForm productId={id} onReviewAdded={onReviewAdded} />}
                 </div>
             </div>
+
+            {/* Mobile Sticky Action Bar */}
+            <div className="mobile-sticky-actions">
+                <button
+                    className="btn btn-primary btn-lg"
+                    onClick={handleAddToCart}
+                    style={{ flex: 1 }}
+                    disabled={product.stock === 0}
+                >
+                    <FiShoppingBag /> {product.stock === 0 ? 'Out' : t('addToCart')}
+                </button>
+                <button className="btn btn-icon btn-white" style={{ width: 56, height: 56 }} onClick={handleWishlist}>
+                    <FiHeart size={20} />
+                </button>
+            </div>
         </div>
     );
 }

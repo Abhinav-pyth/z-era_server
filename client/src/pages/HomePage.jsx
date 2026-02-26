@@ -136,7 +136,7 @@ export default function HomePage() {
                     <div className="lifestyle-content">
                         <h3>Fall in Love with Every Step</h3>
                         <p style={{ marginBottom: '24px', color: 'var(--text-secondary)' }}>
-                            Experience the perfect blend of street-smart aesthetics and orthopaedic comfort. Designed for the modern woman who never stops.
+                            Experience the perfect blend of street-smart aesthetics and orthopaedic comfort.
                         </p>
                         <button className="btn btn-primary" onClick={() => document.getElementById('products').scrollIntoView()}>
                             Explore Collection
@@ -154,7 +154,16 @@ export default function HomePage() {
                     </div>
 
                     <div className="products-layout">
-                        <FilterSidebar filters={filters} setFilters={setFilters} />
+                        <button
+                            className="filter-toggle-mobile"
+                            onClick={() => setShowFilters(!showFilters)}
+                        >
+                            {showFilters ? 'Hide Filters' : 'Show Filters & Sort'}
+                        </button>
+
+                        <div className={`filter-sidebar-wrapper ${showFilters ? 'open' : ''}`}>
+                            <FilterSidebar filters={filters} setFilters={setFilters} />
+                        </div>
 
                         <div style={{ flex: 1 }}>
                             <div className="sort-bar" style={{ marginBottom: '32px' }}>

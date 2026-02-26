@@ -142,6 +142,33 @@ export default function Navbar() {
                     </Link>
                 )}
             </div>
+
+            {/* Bottom Navigation for Mobile */}
+            <div className="bottom-nav">
+                <Link to="/" className={`bottom-nav-item ${isActive('/')}`}>
+                    <FiShoppingBag />
+                    <span>{t('shop') || 'Shop'}</span>
+                </Link>
+                <Link to="/wishlist" className={`bottom-nav-item ${isActive('/wishlist')}`}>
+                    <FiHeart />
+                    <span>{t('wishlist')}</span>
+                </Link>
+                <button className="bottom-nav-item cart-btn" onClick={() => setIsOpen(true)}>
+                    <div style={{ position: 'relative' }}>
+                        <FiShoppingBag />
+                        {totalItems > 0 && <span className="cart-count" style={{ top: -8, right: -8 }}>{totalItems}</span>}
+                    </div>
+                    <span>{t('cart') || 'Cart'}</span>
+                </button>
+                <Link to="/orders" className={`bottom-nav-item ${isActive('/orders')}`}>
+                    <FiPackage />
+                    <span>{t('orders') || 'Orders'}</span>
+                </Link>
+                <Link to="/profile" className={`bottom-nav-item ${isActive('/profile')}`}>
+                    <FiUser />
+                    <span>{t('profile') || 'Profile'}</span>
+                </Link>
+            </div>
         </>
     );
 }
