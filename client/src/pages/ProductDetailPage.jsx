@@ -20,6 +20,7 @@ export default function ProductDetailPage() {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedSize, setSelectedSize] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
 
     useEffect(() => {
         setLoading(true);
@@ -139,12 +140,27 @@ export default function ProductDetailPage() {
                             <div style={{ marginBottom: 24 }}>
                                 <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: 1, color: 'var(--text-secondary)', marginBottom: 10, fontWeight: 600 }}>
                                     {t('availableColors')}
+                                    {selectedColor && <span style={{ color: 'var(--accent-primary)', marginLeft: 8, textTransform: 'none', fontWeight: 700 }}>– {selectedColor}</span>}
                                 </h4>
                                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                     {(typeof product.colors === 'string' ? JSON.parse(product.colors) : product.colors).map(color => (
-                                        <span key={color} className="badge" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)' }}>
+                                        <button
+                                            key={color}
+                                            onClick={() => setSelectedColor(selectedColor === color ? null : color)}
+                                            style={{
+                                                padding: '6px 16px',
+                                                borderRadius: '20px',
+                                                border: `2px solid ${selectedColor === color ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
+                                                background: selectedColor === color ? 'var(--accent-primary)' : 'var(--bg-card)',
+                                                color: selectedColor === color ? 'white' : 'var(--text-primary)',
+                                                cursor: 'pointer',
+                                                fontWeight: selectedColor === color ? 700 : 500,
+                                                fontSize: '0.85rem',
+                                                transition: 'all 0.2s ease',
+                                            }}
+                                        >
                                             {color}
-                                        </span>
+                                        </button>
                                     ))}
                                 </div>
                             </div>

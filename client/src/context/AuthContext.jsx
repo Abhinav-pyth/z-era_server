@@ -7,12 +7,18 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // On every app load, ALWAYS validate token and get fresh user data from DB
+    // This ensures old tokens (missing role field) still produce correct user.role
     useEffect(() => {
         const token = localStorage.getItem('z-era-token');
         if (token) {
             getMe()
                 .then(data => setUser(data.user))
-                .catch(() => localStorage.removeItem('z-era-token'))
+                .catch(() => {
+                    // Token is invalid — clear it
+                    localStorage.removeItem('z-era-token');
+                    setUser(null);
+                })
                 .finally(() => setLoading(false));
         } else {
             setLoading(false);
@@ -22,6 +28,7 @@ export function AuthProvider({ children }) {
     const login = async (email, password) => {
         const data = await apiLogin({ email, password });
         localStorage.setItem('z-era-token', data.token);
+        // Always set user from the API response (includes role)
         setUser(data.user);
         return data;
     };

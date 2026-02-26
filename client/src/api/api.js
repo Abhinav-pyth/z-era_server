@@ -42,8 +42,23 @@ export const getProduct = (id) =>
 export const placeOrder = (body) =>
     fetch(`${API_BASE}/orders`, { method: 'POST', headers: headers(), body: JSON.stringify(body) }).then(handleRes);
 
+// User's own order history
 export const getOrders = () =>
-    fetch(`${API_BASE}/orders`, { headers: headers() }).then(handleRes);
+    fetch(`${API_BASE}/orders/my`, { headers: headers() }).then(handleRes);
+
+// Admin/Manager: Get all orders
+export const getAllOrders = (params = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return fetch(`${API_BASE}/orders?${qs}`, { headers: headers() }).then(handleRes);
+};
+
+// Admin/Manager: Ship an order with tracking info
+export const shipOrder = (id, body) =>
+    fetch(`${API_BASE}/orders/${id}/ship`, { method: 'POST', headers: headers(), body: JSON.stringify(body) }).then(handleRes);
+
+// Admin: Update order status
+export const updateOrderStatus = (id, status) =>
+    fetch(`${API_BASE}/orders/${id}/status`, { method: 'PUT', headers: headers(), body: JSON.stringify({ status }) }).then(handleRes);
 
 // Wishlist
 export const getWishlist = () =>
@@ -71,26 +86,16 @@ export const validateCoupon = (code, amount) =>
         body: JSON.stringify({ code, amount })
     }).then(handleRes);
 
-// Tasks
-export const getTasks = () =>
-    fetch(`${API_BASE}/tasks`, { headers: headers() }).then(handleRes);
+// Analytics (Admin/Manager)
+export const getAnalyticsStats = () =>
+    fetch(`${API_BASE}/analytics/stats`, { headers: headers() }).then(handleRes);
 
-export const createTask = (data) =>
-    fetch(`${API_BASE}/tasks`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify(data)
-    }).then(handleRes);
+export const exportOrdersReport = () =>
+    fetch(`${API_BASE}/analytics/export`, { headers: headers() });
 
-export const updateTask = (id, data) =>
-    fetch(`${API_BASE}/tasks/${id}`, {
-        method: 'PUT',
-        headers: headers(),
-        body: JSON.stringify(data)
-    }).then(handleRes);
+// Admin: Products management
+export const updateProductStock = (id, stock) =>
+    fetch(`${API_BASE}/products/${id}/stock`, { method: 'PUT', headers: headers(), body: JSON.stringify({ stock }) }).then(handleRes);
 
-export const deleteTask = (id) =>
-    fetch(`${API_BASE}/tasks/${id}`, {
-        method: 'DELETE',
-        headers: headers()
-    }).then(handleRes);
+export const createProduct = (body) =>
+    fetch(`${API_BASE}/products`, { method: 'POST', headers: headers(), body: JSON.stringify(body) }).then(handleRes);

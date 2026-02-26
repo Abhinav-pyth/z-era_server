@@ -93,6 +93,16 @@ export default function Navbar() {
                                 <Link to="/profile" className="hey-user" style={{ textDecoration: 'none' }}>
                                     {t('hey')}, {user.name.split(' ')[0]}
                                 </Link>
+                                {(user.role === 'admin' || user.role === 'manager') && (
+                                    <Link
+                                        to="/admin"
+                                        className="btn btn-sm btn-primary"
+                                        title="Admin Panel"
+                                        style={{ fontSize: '0.75rem', padding: '6px 12px' }}
+                                    >
+                                        🛠 Panel
+                                    </Link>
+                                )}
                                 <button className="btn btn-icon btn-ghost" onClick={logout} title={t('logout')}>
                                     <FiLogOut />
                                 </button>

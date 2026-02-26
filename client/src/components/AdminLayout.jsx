@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FiLayout, FiPackage, FiShoppingBag, FiArrowLeft, FiEdit3, FiBarChart2, FiUser } from 'react-icons/fi';
+import { FiLayout, FiPackage, FiShoppingBag, FiArrowLeft, FiBarChart2 } from 'react-icons/fi';
 
 const AdminLayout = ({ children }) => {
     const { user } = useAuth();
@@ -8,52 +8,96 @@ const AdminLayout = ({ children }) => {
 
     const menuItems = [
         { label: 'Dashboard', icon: <FiLayout />, path: '/admin', roles: ['admin', 'manager'] },
-        { label: 'Products', icon: <FiPackage />, path: '/admin/products', roles: ['admin'] },
-        { label: 'Product Management', icon: <FiEdit3 />, path: '/admin/product-management', roles: ['admin'] },
+        { label: 'Products', icon: <FiPackage />, path: '/admin/products', roles: ['admin', 'manager'] },
         { label: 'Orders', icon: <FiShoppingBag />, path: '/admin/orders', roles: ['admin', 'manager'] },
-        { label: 'Reports', icon: <FiBarChart2 />, path: '/admin/reports', roles: ['admin'] },
-        { label: 'Tasks', icon: <FiUser />, path: '/admin/tasks', roles: ['admin', 'manager'] },
+        { label: 'Reports', icon: <FiBarChart2 />, path: '/admin/reports', roles: ['admin', 'manager'] },
     ];
 
     if (!user || !['admin', 'manager'].includes(user.role)) {
-        return <div className="p-20 text-center">Access Denied.</div>;
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#f8fafc' }}>
+                <div style={{ textAlign: 'center' }}>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>Access Denied</h2>
+                    <p style={{ color: '#64748b' }}>You do not have permission to view this page.</p>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
-                <div className="p-6 border-b border-slate-100 mb-6">
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            <aside style={{
+                width: '260px',
+                background: 'white',
+                borderRight: '1px solid #e2e8f0',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'fixed',
+                height: '100vh',
+                left: 0,
+                top: 0,
+                zIndex: 10
+            }}>
+                <div style={{ padding: '24px', borderBottom: '1px solid #f1f5f9', marginBottom: '20px' }}>
+                    <h2 style={{
+                        margin: 0,
+                        fontSize: '1.25rem',
+                        fontWeight: 800,
+                        background: 'linear-gradient(to right, #7c3aed, #4f46e5)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>
                         Z-era Control
                     </h2>
                 </div>
 
-                <nav className="flex-1 px-4 space-y-2">
+                <nav style={{ flex: 1, padding: '0 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {menuItems.filter(item => item.roles.includes(user.role)).map(item => (
                         <Link
                             key={item.path}
                             to={item.path}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${location.pathname === item.path
-                                ? 'bg-purple-50 text-purple-700'
-                                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
-                                }`}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                padding: '12px 16px',
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                fontWeight: 600,
+                                fontSize: '0.95rem',
+                                transition: 'all 0.2s ease',
+                                background: location.pathname === item.path ? '#f5f3ff' : 'transparent',
+                                color: location.pathname === item.path ? '#7c3aed' : '#64748b'
+                            }}
                         >
-                            <span className="text-lg">{item.icon}</span>
+                            <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
                             {item.label}
                         </Link>
                     ))}
                 </nav>
 
-                <div className="p-6 mt-auto">
-                    <Link to="/" className="flex items-center gap-2 text-slate-400 hover:text-slate-600 text-sm">
+                <div style={{ padding: '24px', borderTop: '1px solid #f1f5f9' }}>
+                    <Link to="/" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: '#94a3b8',
+                        textDecoration: 'none',
+                        fontSize: '0.9rem',
+                        fontWeight: 500
+                    }}>
                         <FiArrowLeft /> Back to Store
                     </Link>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
+            <main style={{
+                flex: 1,
+                marginLeft: '260px', // Space for fixed sidebar
+                minWidth: 0 // Prevent content overflow
+            }}>
                 {children}
             </main>
         </div>

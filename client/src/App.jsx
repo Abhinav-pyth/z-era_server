@@ -14,8 +14,8 @@ const OrdersPage = lazy(() => import('./pages/OrdersPage'));
 const WishlistPage = lazy(() => import('./pages/WishlistPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 
-// Admin Pages
-const AdminLayout = lazy(() => import('./components/AdminLayout'));
+// Admin / Manager Pages
+import AdminLayout from './components/AdminLayout';
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminProducts = lazy(() => import('./pages/admin/AdminProducts'));
 const OrderManagement = lazy(() => import('./pages/admin/OrderManagement'));
@@ -37,8 +37,9 @@ function App() {
                     <Route path="/wishlist" element={<WishlistPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
 
-                    {/* Admin/Manager Routes */}
+                    {/* Admin / Manager Routes */}
                     <Route path="/admin" element={<AdminLayout><Dashboard /></AdminLayout>} />
+                    <Route path="/admin/reports" element={<AdminLayout><Dashboard /></AdminLayout>} />
                     <Route path="/admin/products" element={<AdminLayout><AdminProducts /></AdminLayout>} />
                     <Route path="/admin/orders" element={<AdminLayout><OrderManagement /></AdminLayout>} />
                 </Routes>
